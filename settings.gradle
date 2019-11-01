@@ -1,0 +1,2 @@
+include ':app', ':extensions:googlemaps', ':smartmarker', ':extensions:location', ':extensions:mapbox'
+rootProject.name='Smart Marker'

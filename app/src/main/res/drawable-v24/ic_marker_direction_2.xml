@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Created by Muhammad Utsman on 9/28/19 6:25 AM
+  ~ Copyright (c) 2019 . All rights reserved.
+  ~ Last modified 9/28/19 5:20 AM
+  -->
+
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="24dp"
+    android:height="24dp"
+    android:viewportWidth="24"
+    android:viewportHeight="24">
+
+    <path
+        android:pathData="M0 0h24v24H0z" />
+    <path
+        android:fillColor="#1E62E9"
+        android:pathData="M12 2L4.5 20.29l0.71 0.71 L12 18l6.79 3 0.71-0.71z" />
+</vector>
