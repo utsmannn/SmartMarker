@@ -89,7 +89,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun updateView() {
-        locationWatcher.getLocationUpdate(object : LocationUpdateListener {
+        locationWatcher.getLocationUpdate(this, object : LocationUpdateListener {
             override fun oldLocation(oldLocation: Location) {
 
             }
@@ -114,7 +114,7 @@ class MainActivity : AppCompatActivity() {
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe {
-                locationWatcher.getLocation {
+                locationWatcher.getLocation(this) {
                     ready.invoke(it)
                 }
             }
