@@ -59,11 +59,16 @@ class MainActivity : AppCompatActivity() {
         Mapbox.getInstance(this, "sk.eyJ1Ijoia3VjaW5nYXBlcyIsImEiOiJjazI1eXFqYzQxcGZjM25ueTZiMHU3aDl3In0.EfIuu2NSv2CacIKEhkXhCg")
         setContentView(R.layout.activity_main)
 
+
         locationWatcher = LocationWatcher(this)
         val googleMapsView = (google_map_view as SupportMapFragment)
         val mapboxMapsView = findViewById<MapView>(R.id.mapbox_view)
 
+
+        // get location once time
         locationWatcher.getLocation(this) { loc ->
+
+            // google maps async
             googleMapsView.getMapAsync {  map ->
                 googleMap = map
                 val markerOption = MarkerOptions()
@@ -74,6 +79,7 @@ class MainActivity : AppCompatActivity() {
                 map.animateCamera(CameraUpdateFactory.newLatLngZoom(loc.toLatLngGoogle(), 17f))
             }
 
+            // mapbox async
             mapboxMapsView.getMapAsync {  map ->
                 mapboxMap = map
                 val markerUtil = MarkerUtil(this)
@@ -91,6 +97,7 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
+        // update camera to marker every 5 second
         timer {
             googleMap?.animateCamera(CameraUpdateFactory.newLatLngZoom(it.toLatLngGoogle(), 17f))
             val position = CameraPosition.Builder()
@@ -101,10 +108,11 @@ class MainActivity : AppCompatActivity() {
             mapboxMap?.animateCamera(com.mapbox.mapboxsdk.camera.CameraUpdateFactory.newCameraPosition(position))
         }
 
-        updateView()
+        // update your location
+        updateLocation()
     }
 
-    private fun updateView() {
+    private fun updateLocation() {
         locationWatcher.getLocationUpdate(this, object : LocationUpdateListener {
             override fun oldLocation(oldLocation: Location) {
 
@@ -139,9 +147,9 @@ class MainActivity : AppCompatActivity() {
 
     }
 
-    override fun onStop() {
+    override fun onDestroy() {
         locationWatcher.stopLocationWatcher()
         disposable.dispose()
-        super.onStop()
+        super.onDestroy()
     }
 }
