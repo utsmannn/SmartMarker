@@ -49,7 +49,8 @@ SmartMarker.moveMarkerSmoothly(mapboxMarker, location)
 ```
 
 ### Location Extension
-I create location extensions for get your location every second with old location and new location (delay 30 millisecond)
+I create location extensions for get your location every second with old location and new location (delay 30 millisecond).
+Thanks [@Patloew](https://github.com/patloew) for [ReactiveLocation](https://github.com/patloew/RxLocation).
 ```kotlin
 // define location watcher
 val locationWatcher: LocationWatcher = LocationWatcher(context)
