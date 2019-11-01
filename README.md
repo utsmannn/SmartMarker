@@ -95,9 +95,9 @@ locationWatcher.getLocationUpdate(this, object : LocationUpdateListener {
 })
 
 // stop your watcher in onStop activity
-override fun onStop() {
+override fun onDestroy() {
     locationWatcher.stopLocationWatcher()
-    super.onStop()
+    super.onDestroy()
 }
 
 ```
