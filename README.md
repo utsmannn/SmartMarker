@@ -5,6 +5,20 @@
   <img src="https://i.ibb.co/Wspktd7/ezgif-com-gif-maker-1.gif"/>
 </p>
 
+## Table of Content
+- [Download](https://github.com/utsmannn/SmartMarker#download)
+- [Marker](https://github.com/utsmannn/SmartMarker#add-marker)
+    - [Google Maps](https://github.com/utsmannn/SmartMarker#google-maps)
+    - [Mapbox](https://github.com/utsmannn/SmartMarker#mapbox)
+- [Move Marker](https://github.com/utsmannn/SmartMarker#move-your-marker)
+- [Location Watcher](https://github.com/utsmannn/SmartMarker#location-watcher-extension)
+    - [Use](https://github.com/utsmannn/TMSService/new/master?readme=1#use)
+    - [Permission Helper](https://github.com/utsmannn/TMSService/new/master?readme=1#permission-helper)
+- [Other Extensions](https://github.com/utsmannn/TMSService/new/master?readme=1#other-extensions)
+- [Simple Example](https://github.com/utsmannn/TMSService/new/master?readme=1#simple-example)
+    - [Google Maps Activity](https://github.com/utsmannn/TMSService/new/master?readme=1#google-maps-1)
+    - [Mapbox Activity](https://github.com/utsmannn/TMSService/new/master?readme=1#mapbox-1)
+
 ## Download
 ```groovy
 
