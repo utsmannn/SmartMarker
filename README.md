@@ -9,48 +9,69 @@
 ```groovy
 
 // the core library
-implementation 'com.utsman.smartmarker:core:0.0.1@aar'
+implementation 'com.utsman.smartmarker:core:1.0.3@aar'
 
 // extension for google maps
-implementation 'com.utsman.smartmarker:ext-googlemaps:0.0.1'
+implementation 'com.utsman.smartmarker:ext-googlemaps:1.0.3@aar'
 
 // extension for Mapbox
-implementation 'com.utsman.smartmarker:ext-mapbox:0.0.1' 
-
-// extension for easy get location every second
-implementation 'com.utsman.smartmarker:ext-location:0.0.1'
+implementation 'com.utsman.smartmarker:ext-mapbox:1.0.3@aar'
 
 ```
 For extensions, you don't need to add mapbox extensions if you don't use the sdk mapbox. As well as the google map sdk.
 
-## Use
-
+## Add Marker
 ### Google Maps
+Use the default method as usual for google maps. Reference for add marker in google maps [is here](https://developers.google.com/maps/documentation/android-sdk/map-with-marker) <br>
+And code look like this
 ```kotlin
-SmartMarker.moveMarkerSmoothly(marker, location)
+val markerOption = MarkerOptions()
+        .position(latLng)
+
+val marker = map.addMarker(markerOption) // this your marker
+
 ```
 
 ### Mapbox
-For Mapbox, adding marker is little hard, so I create helper for it
-
+For Mapbox, adding marker is little hard, so I create helper for it, ***and you must coding after setup ```style```***
 ```kotlin
-// Define marker util
-val markerUtil = MarkerUtil(context)
+// define marker options
+val markerOption = MarkerOptions.Builder() // from 'com.utsman.smartmarker.mapbox.MarkerOptions'
+    .setId("marker-id")
+    .addIcon(R.drawable.ic_marker, true) // if marker is not vector, use 'false'
+    .addPosition(latLng)
+    .build(context)
 
-// Define mapbox marker
-var mapboxMarker: MarkerUtil.Marker? = null
+// define marker layer
+val markerLayer = map.addMarker(markerOption) // support vararg (multiple marker option)
 
-// add your marker
-mapboxMarker = markerUtil.addMarker("marker-id", style, R.drawable.ic_marker, true, latlng) // if marker is not vector, use 'false'
-
-// and move your marker smoothly
-SmartMarker.moveMarkerSmoothly(mapboxMarker, location)
-
+// and get your marker in markerLayer by id from marker options
+val marker = markerLayer.get("marker-id") // // this your marker
 ```
 
-### Location Extension
-I create location extensions for get your location every second with old location and new location (delay 30 millisecond).
-Thanks [@Patloew](https://github.com/patloew) for [ReactiveLocation](https://github.com/patloew/RxLocation).
+## Move Your Marker
+```kotlin
+SmartMarker.moveMarkerSmoothly(marker, latLng)
+
+// or with extensions for kotlin
+marker.moveMarkerSmoothly(marker, latLng)
+```
+
+## Location Watcher Extension
+I create location extensions for get your location every second with old location and new location (delay 30 millisecond). <br>
+Just add this extensions 
+```groovy
+implementation 'com.utsman.smartmarker:ext-location:1.0.3@aar'
+
+// for extensions watcher location, you need some library with latest versions
+implementation 'com.google.android.gms:play-services-location:17.0.0'
+implementation 'pl.charmas.android:android-reactive-location2:2.1@aar'
+implementation 'io.reactivex.rxjava2:rxjava:2.2.12'
+implementation 'io.reactivex.rxjava2:rxandroid:2.1.1'
+implementation 'com.karumi:dexter:6.0.0'
+```
+
+### Use
 ```kotlin
 // define location watcher
 val locationWatcher: LocationWatcher = LocationWatcher(context)
@@ -60,28 +81,8 @@ locationWatcher.getLocation { location ->
     // your location result
 }
 
-// get location once time with permission helper
-locationWatcher.getLocation(context) { location ->
-    // your location result
-}
-
 // get location update every second
 locationWatcher.getLocationUpdate(object : LocationUpdateListener {
-    override fun oldLocation(oldLocation: Location?) {
-        // your location realtime result
-    }
-    
-    override fun newLocation(newLocation: Location?) {
-        // your location past with delay 30 millisecond (0.03 second)
-    }
-
-    override fun failed(throwable: Throwable?) {
-        // if location failed
-    }
-})
-
-// get location update every second with permission helper
-locationWatcher.getLocationUpdate(this, object : LocationUpdateListener {
     override fun oldLocation(oldLocation: Location?) {
         // your location realtime result
     }
@@ -103,12 +104,41 @@ override fun onDestroy() {
 
 ```
 
+### Permission helper
+If you have not applied location permission for your app, you can be set permission with adding context before listener.
+```kotlin
+// get location once time with permission helper
+locationWatcher.getLocation(context) { location ->
+    // your location result
+}
+
+// get location update every second with permission helper
+locationWatcher.getLocationUpdate(context, object : LocationUpdateListener {
+    override fun oldLocation(oldLocation: Location?) {
+        // your location realtime result
+    }
+    
+    override fun newLocation(newLocation: Location?) {
+        // your location past with delay 30 millisecond (0.03 second)
+    }
+
+    override fun failed(throwable: Throwable?) {
+        // if location failed
+    }
+})
+```
+
+Don't forget to add location permission ```android.permission.ACCESS_FINE_LOCATION``` for your apps
+```xml
+<uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+```
+
 ## Other Extensions
 ```kotlin
-// Convert Location to LatLng for Google Maps
+// Convert Location to LatLng for Google Maps ('com.google.android.gms.maps.model.LatLng')
 location.toLatLngGoogle()
 
-// Convert Location to LatLng for Mapbox
+// Convert Location to LatLng for Mapbox ('com.mapbox.mapboxsdk.geometry.LatLng')
 location.toLatLngMapbox()
 
 // use marker as vector for Google Maps

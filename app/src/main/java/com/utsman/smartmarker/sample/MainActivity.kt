@@ -22,6 +22,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.SupportMapFragment
+import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
 import com.mapbox.mapboxsdk.Mapbox
@@ -34,8 +35,10 @@ import com.utsman.smartmarker.googlemaps.bitmapFromVector
 import com.utsman.smartmarker.googlemaps.toLatLngGoogle
 import com.utsman.smartmarker.location.LocationUpdateListener
 import com.utsman.smartmarker.location.LocationWatcher
-import com.utsman.smartmarker.mapbox.MarkerUtil
+import com.utsman.smartmarker.mapbox.addMarker
+import com.utsman.smartmarker.mapbox.addMarkers
 import com.utsman.smartmarker.mapbox.toLatLngMapbox
+import com.utsman.smartmarker.moveMarkerSmoothly
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
@@ -47,7 +50,7 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var locationWatcher: LocationWatcher
     private var googleMarker: Marker? = null
-    private var mapboxMarker: MarkerUtil.Marker? = null
+    private var mapboxMarker: com.utsman.smartmarker.mapbox.Marker? = null
 
     private var googleMap: GoogleMap? = null
     private var mapboxMap: MapboxMap? = null
@@ -71,21 +74,97 @@ class MainActivity : AppCompatActivity() {
             // google maps async
             googleMapsView.getMapAsync {  map ->
                 googleMap = map
+
+                val bndung = LatLng(-6.914744, 107.609810)
+                val bks = LatLng(-6.241586, 106.992416)
+
                 val markerOption = MarkerOptions()
-                    .position(loc.toLatLngGoogle())
+                    .position(bndung)
                     .icon(bitmapFromVector(this@MainActivity, R.drawable.ic_marker_direction_2))
 
-                googleMarker = map.addMarker(markerOption)
+                val markerOption2 = MarkerOptions()
+                    .position(bks)
+                    .icon(bitmapFromVector(this@MainActivity, R.drawable.ic_marker_direction_2))
+
+                //googleMarker = map.addMarker(markerOption)
+                val mar1 = map.addMarker(markerOption)
+                val mar2 = map.addMarker(markerOption2)
+
+                btn_test_gmaps.setOnClickListener {
+                    mar1.moveMarkerSmoothly(bks)
+                    mar2.moveMarkerSmoothly(bndung)
+                }
                 map.animateCamera(CameraUpdateFactory.newLatLngZoom(loc.toLatLngGoogle(), 17f))
             }
 
             // mapbox async
             mapboxMapsView.getMapAsync {  map ->
                 mapboxMap = map
-                val markerUtil = MarkerUtil(this)
-                map.setStyle(Style.OUTDOORS) { style ->
 
-                    mapboxMarker = markerUtil.addMarker("driver", style, R.drawable.ic_marker_direction_2, true, loc.toLatLngMapbox())
+                map.setStyle(Style.OUTDOORS) { style ->
+                    /**
+                     * version 0.0.3
+                     * */
+                    /*val markerUtil = com.utsman.smartmarker.mapbox.MarkerOptions(this, style)
+                    mapboxMarker = markerUtil.addMarker("driver", R.drawable.ic_marker_direction_2, true, loc.toLatLngMapbox())*/
+                    /**
+                     * End version 0.0.3
+                     * */
+
+                    /**
+                     * version 1.0.3 use MarkerOptions
+                     * */
+                    val markerOptions = com.utsman.smartmarker.mapbox.MarkerOptions.Builder()
+                        .setId("id")
+                        .addIcon(R.drawable.mapbox_marker_icon_default)
+                        .addPosition(loc.toLatLngMapbox())
+                        .build(this)
+
+                    val bnd = com.mapbox.mapboxsdk.geometry.LatLng(-6.914744, 107.609810)
+                    val jgkt = com.mapbox.mapboxsdk.geometry.LatLng(-7.797068, 110.370529)
+                    val bks = com.mapbox.mapboxsdk.geometry.LatLng(-6.241586, 106.992416)
+                    val btn = com.mapbox.mapboxsdk.geometry.LatLng(-6.120000, 106.150276)
+
+                    val markerOptions1 = com.utsman.smartmarker.mapbox.MarkerOptions.Builder()
+                        .setId("jgja")
+                        .addIcon(R.drawable.ic_marker_direction_2, true)
+                        .addPosition(jgkt)
+                        .build(this)
+
+                    val markerOptions2 = com.utsman.smartmarker.mapbox.MarkerOptions.Builder()
+                        .setId("bks")
+                        .addIcon(R.drawable.ic_marker_direction_2, true)
+                        .addPosition(bks)
+                        .build(this)
+
+                    val markerOptions3 = com.utsman.smartmarker.mapbox.MarkerOptions.Builder()
+                        .setId("btn")
+                        .addPosition(btn)
+                        .build(this)
+
+                    //val markers = map.addMarkers(markerOptions1, markerOptions2, markerOptions3)
+
+                    val markers = map.addMarker(markerOptions3)
+
+                    val aa = markers.get("")
+
+                    btn_test.setOnClickListener {
+
+                        //markers.getId("btn").moveMarkerSmoothly(bks)
+                        markers.get("btn")?.moveMarkerSmoothly(bks)
+
+                        /*markers.filter {
+                            it.getId() != "bks"
+                        }.apply {
+                            map {
+                                it.moveMarkerSmoothly(bnd)
+                            }
+                        }*/
+                    }
+
+
+
+                    //val bndMarker = map.addMarker(markerOptions1)
 
                     val position = CameraPosition.Builder()
                         .target(loc.toLatLngMapbox())
@@ -99,13 +178,14 @@ class MainActivity : AppCompatActivity() {
 
         // update camera to marker every 5 second
         timer {
-            googleMap?.animateCamera(CameraUpdateFactory.newLatLngZoom(it.toLatLngGoogle(), 17f))
+            //googleMap?.animateCamera(CameraUpdateFactory.newLatLngZoom(it.toLatLngGoogle(), 17f))
             val position = CameraPosition.Builder()
                 .target(it.toLatLngMapbox())
                 .zoom(15.0)
                 .build()
 
-            mapboxMap?.animateCamera(com.mapbox.mapboxsdk.camera.CameraUpdateFactory.newCameraPosition(position))
+
+            //mapboxMap?.animateCamera(com.mapbox.mapboxsdk.camera.CameraUpdateFactory.newCameraPosition(position))
         }
 
         // update your location
@@ -120,11 +200,11 @@ class MainActivity : AppCompatActivity() {
 
             override fun newLocation(newLocation: Location) {
                 googleMarker?.let { marker ->
-                    SmartMarker.moveMarkerSmoothly(marker, newLocation.toLatLngGoogle())
+                    //SmartMarker.moveMarkerSmoothly(marker, newLocation.toLatLngGoogle())
                 }
 
                 mapboxMarker?.let { marker ->
-                    SmartMarker.moveMarkerSmoothly(marker, newLocation.toLatLngMapbox())
+                    //SmartMarker.moveMarkerSmoothly(marker, newLocation.toLatLngMapbox())
                 }
             }
 

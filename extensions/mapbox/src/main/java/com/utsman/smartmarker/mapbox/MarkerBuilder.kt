@@ -17,8 +17,11 @@
 package com.utsman.kemana.maputil
 
 import android.content.Context
+import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.util.Log
 import androidx.annotation.DrawableRes
+import androidx.core.content.res.ResourcesCompat
 import com.mapbox.geojson.Feature
 import com.mapbox.geojson.Point
 import com.mapbox.mapboxsdk.geometry.LatLng
@@ -26,11 +29,13 @@ import com.mapbox.mapboxsdk.maps.Style
 import com.mapbox.mapboxsdk.style.layers.PropertyFactory
 import com.mapbox.mapboxsdk.style.layers.SymbolLayer
 import com.mapbox.mapboxsdk.style.sources.GeoJsonSource
-import com.utsman.smartmarker.mapbox.MarkerUtil
+import com.mapbox.mapboxsdk.utils.BitmapUtils
+import com.utsman.smartmarker.mapbox.MarkerOptions
+import com.utsman.smartmarker.mapbox.R
 
-class MarkerBuilder(private val context: Context, private val style: Style) {
+class MarkerBuilder(private val context: Context, private val style: Style?) {
 
-    internal lateinit var jsonSource: GeoJsonSource
+    lateinit var jsonSource: GeoJsonSource
 
     private fun newSymbol(id: String): SymbolLayer {
         return SymbolLayer("layer-$id", "source-$id")
@@ -38,7 +43,7 @@ class MarkerBuilder(private val context: Context, private val style: Style) {
 
     internal fun newMarker(id: String, latLng: LatLng, @DrawableRes iconVector: Int, vector: Boolean = false): SymbolLayer {
         val symbolLayer = newSymbol(id)
-        val markerUtil = MarkerUtil(context)
+        //val markerUtil = MarkerOptions(context, style)
 
         jsonSource = GeoJsonSource(
             "source-$id",
@@ -46,15 +51,19 @@ class MarkerBuilder(private val context: Context, private val style: Style) {
         )
 
         if (vector) {
-            style.addImage("marker-$id", markerUtil.markerVector(iconVector))
+            style?.addImage("marker-$id", markerVector(context, iconVector))
         } else {
             val markerBitmap =
                 BitmapFactory.decodeResource(context.resources, iconVector)
-            style.addImage("marker-$id", markerBitmap)
+            try {
+                style?.addImage("marker-$id", markerBitmap)
+            } catch (e: NullPointerException) {
+                Log.e("SmartMarker-mapbox", "Cannot process bitmap, maybe your marker is vector, please add 'true' in 'addIcon'")
+            }
         }
 
 
-        style.addSource(jsonSource)
+        style?.addSource(jsonSource)
 
         symbolLayer.withProperties(
             PropertyFactory.iconImage("marker-$id"),
@@ -67,4 +76,12 @@ class MarkerBuilder(private val context: Context, private val style: Style) {
 
 internal fun Style.addMarker(symbolLayer: SymbolLayer) {
     addLayer(symbolLayer)
+}
+
+internal fun markerVector(context: Context, @DrawableRes marker: Int): Bitmap {
+    val drawable = ResourcesCompat.getDrawable(context.resources,
+        marker, null)
+    return BitmapUtils.getBitmapFromDrawable(drawable) ?: BitmapFactory.decodeResource(context.resources,
+        R.drawable.mapbox_marker_icon_default
+    )
 }

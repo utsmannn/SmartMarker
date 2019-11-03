@@ -21,7 +21,7 @@ import android.animation.ValueAnimator;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.utsman.smartmarker.googlemaps.ExtKt;
-import com.utsman.smartmarker.mapbox.MarkerUtil;
+import com.utsman.smartmarker.mapbox.MarkerOptions;
 
 public class SmartMarker {
     public static void moveMarkerSmoothly(final Marker marker, LatLng newLatLng) {
@@ -32,7 +32,7 @@ public class SmartMarker {
         ExtKt.rotateMarker(marker, f);
     }
 
-    public static void moveMarkerSmoothly(MarkerUtil.Marker marker, com.mapbox.mapboxsdk.geometry.LatLng newLatLng) {
-        marker.moveMarkerAnimation(newLatLng);
+    public static void moveMarkerSmoothly(com.utsman.smartmarker.mapbox.Marker marker, com.mapbox.mapboxsdk.geometry.LatLng newLatLng) {
+        marker.moveMarkerSmoothly(newLatLng);
     }
 }

@@ -58,4 +58,6 @@ dependencies {
     implementation project(":extensions:mapbox")
     implementation project(":extensions:location")
 
+    implementation 'com.karumi:dexter:6.0.0'
+
 }
