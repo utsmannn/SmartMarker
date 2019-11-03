@@ -210,17 +210,16 @@ class MainActivity : AppCompatActivity() {
                 // set style before setup your marker
                 map.setStyle(Style.OUTDOORS) { style -> 
                 
-                        val markerOption = MarkerOptions.Builder() // from 'com.utsman.smartmarker.mapbox.MarkerOptions'
-                               .setId("marker-id")
-                               .addIcon(R.drawable.ic_marker, true)
-                               .addPosition(loc.toLatLngMapbox())
-                               .build(this)
-        
-                        val markerLayer = map.addMarker(markerOption)
-                        marker = markerLayer.get("marker-id")
-                        
-                        map.animateCamera(CameraUpdateFactory.newLatLngZoom(loc.toLatLngGoogle(), 17f))
-                
+                    val markerOption = MarkerOptions.Builder() // from 'com.utsman.smartmarker.mapbox.MarkerOptions'
+                           .setId("marker-id")
+                           .addIcon(R.drawable.ic_marker, true)
+                           .addPosition(loc.toLatLngMapbox())
+                           .build(this)
+    
+                    val markerLayer = map.addMarker(markerOption)
+                    marker = markerLayer.get("marker-id")
+                    
+                    map.animateCamera(CameraUpdateFactory.newLatLngZoom(loc.toLatLngGoogle(), 17f))
                 }
             }
         }
