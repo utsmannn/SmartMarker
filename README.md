@@ -179,10 +179,11 @@ class MainActivity : AppCompatActivity() {
             }
 
             override fun newLocation(newLocation: Location) {
+                // move your marker smoothly with new location
                 marker?.moveMarkerSmoothly(newLocation.toLatLngGoogle())
                                     
                 // or use class SmartMarker for java
-                // SmartMarker.moveMarkerSmoothly(marker, newLocation.toLatLngGoogle())
+                // SmartMarker.moveMarkerSmoothly(marker, newLocation.toLatLngMapbox())    
             }
 
             override fun failed(throwable: Throwable?) {
@@ -231,10 +232,12 @@ class MainActivity : AppCompatActivity() {
             }
 
             override fun newLocation(newLocation: Location) {
+                // move your marker smoothly with new location
                 marker?.moveMarkerSmoothly(newLocation.toLatLngGoogle())
-                                    
+
                 // or use class SmartMarker for java
-                // SmartMarker.moveMarkerSmoothly(marker, newLocation.toLatLngMapbox())
+                // SmartMarker.moveMarkerSmoothly(marker, newLocation.toLatLngMapbox())  
+            
             }
 
             override fun failed(throwable: Throwable?) {
