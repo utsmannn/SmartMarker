@@ -201,6 +201,8 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        // setup instance with api key mapbox before 'setContentView'
+        Mapbox.getInstance(this, "sk.eyJ1Ijoia3VjaW5nYXBlcyIsImEiOiJjazI1eXFqYzQxcGZjM25ueTZiMHU3aDl3In0.EfIuu2NSv2CacIKEhkXhCg")
         setContentView(R.layout.activity_main)
 
         locationWatcher = LocationWatcher(this)
@@ -246,8 +248,6 @@ class MainActivity : AppCompatActivity() {
     }
 }
 ```
-
-Sample [MainActivity.kt](https://github.com/utsmannn/SmartMarker/blob/master/app/src/main/java/com/utsman/smartmarker/sample/MainActivity.kt)
 
 
 ## My Other Libraries
