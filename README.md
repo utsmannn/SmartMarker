@@ -147,13 +147,12 @@ bitmapFromVector(context, R.drawable.marker_vector)
 ```
 
 ## Simple Example
+### Google Maps
 ```kotlin
 class MainActivity : AppCompatActivity() {
 
     private lateinit var locationWatcher: LocationWatcher
-    private var googleMarker: Marker? = null
-    private var googleMap: GoogleMap? = null
-
+    private var marker: Marker? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -164,25 +163,79 @@ class MainActivity : AppCompatActivity() {
 
         locationWatcher.getLocation(this) { loc ->
             googleMapsView.getMapAsync {  map ->
-                googleMap = map
                 val markerOption = MarkerOptions()
                     .position(loc.toLatLngGoogle())
-                    .icon(bitmapFromVector(this@MainActivity, R.drawable.ic_marker_direction_2))
+                    .icon(bitmapFromVector(this@MainActivity, R.drawable.ic_marker))
 
-                googleMarker = map.addMarker(markerOption)
+                marker = map.addMarker(markerOption)
                 map.animateCamera(CameraUpdateFactory.newLatLngZoom(loc.toLatLngGoogle(), 17f))
             }
         }
 
+        // device tracker
         locationWatcher.getLocationUpdate(this, object : LocationUpdateListener {
             override fun oldLocation(oldLocation: Location) {
 
             }
 
             override fun newLocation(newLocation: Location) {
-                googleMarker?.let { marker ->
-                    SmartMarker.moveMarkerSmoothly(marker, newLocation.toLatLngGoogle())
+                marker?.moveMarkerSmoothly(newLocation.toLatLngGoogle())
+                                    
+                // or use class SmartMarker for java
+                // SmartMarker.moveMarkerSmoothly(marker, newLocation.toLatLngGoogle())
+            }
+
+            override fun failed(throwable: Throwable?) {
+            }
+        })
+    }
+}
+```
+### Mapbox
+```kotlin
+class MainActivity : AppCompatActivity() {
+
+    private lateinit var locationWatcher: LocationWatcher
+    private var marker: Marker? = null // from 'com.utsman.smartmarker.mapbox.Marker'
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_main)
+
+        locationWatcher = LocationWatcher(this)
+      
+        locationWatcher.getLocation(this) { loc ->
+            mapbox_view.getMapAsync {  map ->
+                
+                // set style before setup your marker
+                map.setStyle(Style.OUTDOORS) { style -> 
+                
+                        val markerOption = MarkerOptions.Builder() // from 'com.utsman.smartmarker.mapbox.MarkerOptions'
+                               .setId("marker-id")
+                               .addIcon(R.drawable.ic_marker, true)
+                               .addPosition(loc.toLatLngMapbox())
+                               .build(this)
+        
+                        val markerLayer = map.addMarker(markerOption)
+                        marker = markerLayer.get("marker-id")
+                        
+                        map.animateCamera(CameraUpdateFactory.newLatLngZoom(loc.toLatLngGoogle(), 17f))
+                
                 }
+            }
+        }
+
+        // device tracker
+        locationWatcher.getLocationUpdate(this, object : LocationUpdateListener {
+            override fun oldLocation(oldLocation: Location) {
+
+            }
+
+            override fun newLocation(newLocation: Location) {
+                marker?.moveMarkerSmoothly(newLocation.toLatLngGoogle())
+                                    
+                // or use class SmartMarker for java
+                // SmartMarker.moveMarkerSmoothly(marker, newLocation.toLatLngMapbox())
             }
 
             override fun failed(throwable: Throwable?) {
