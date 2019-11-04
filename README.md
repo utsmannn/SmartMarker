@@ -12,12 +12,12 @@
     - [Mapbox](https://github.com/utsmannn/SmartMarker#mapbox)
 - [Move Marker](https://github.com/utsmannn/SmartMarker#move-your-marker)
 - [Location Watcher](https://github.com/utsmannn/SmartMarker#location-watcher-extension)
-    - [Use](https://github.com/utsmannn/TMSService/new/master?readme=1#use)
-    - [Permission Helper](https://github.com/utsmannn/TMSService/new/master?readme=1#permission-helper)
-- [Other Extensions](https://github.com/utsmannn/TMSService/new/master?readme=1#other-extensions)
-- [Simple Example](https://github.com/utsmannn/TMSService/new/master?readme=1#simple-example)
-    - [Google Maps Activity](https://github.com/utsmannn/TMSService/new/master?readme=1#google-maps-1)
-    - [Mapbox Activity](https://github.com/utsmannn/TMSService/new/master?readme=1#mapbox-1)
+    - [Use](https://github.com/utsmannn/SmartMarker#use)
+    - [Permission Helper](https://github.com/utsmannn/SmartMarker#permission-helper)
+- [Other Extensions](https://github.com/utsmannn/SmartMarker#other-extensions)
+- [Simple Example](https://github.com/utsmannn/SmartMarker#simple-example)
+    - [Google Maps Activity](https://github.com/utsmannn/SmartMarker#google-maps-1)
+    - [Mapbox Activity](https://github.com/utsmannn/SmartMarker#mapbox-1)
 
 ## Download
 ```groovy

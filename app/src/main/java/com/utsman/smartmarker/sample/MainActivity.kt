@@ -224,7 +224,6 @@ class MainActivity : AppCompatActivity() {
             }
 
         disposable.add(obs)
-
     }
 
     override fun onDestroy() {
