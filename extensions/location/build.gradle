@@ -28,7 +28,7 @@ ext {
 
     publishedGroupId = 'com.utsman.smartmarker'
     artifact = 'ext-location'
-    libraryVersion = '1.0.3'
+    libraryVersion = '1.0.4'
 
     libraryDescription = 'Smart Marker for Google Maps and Mapbox'
     siteUrl = 'https://github.com/utsmannn/SmartMarker'
@@ -51,7 +51,7 @@ android {
         minSdkVersion 16
         targetSdkVersion 29
         versionCode 1
-        versionName "1.0.3"
+        versionName "1.0.4"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles 'consumer-rules.pro'

@@ -18,21 +18,34 @@ package com.utsman.smartmarker;
 
 import android.animation.ValueAnimator;
 
+import androidx.annotation.Nullable;
+
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.utsman.smartmarker.googlemaps.ExtKt;
-import com.utsman.smartmarker.mapbox.MarkerOptions;
 
 public class SmartMarker {
+    public static void moveMarkerSmoothly(final Marker marker, LatLng newLatLng, @Nullable Boolean rotate) {
+        ValueAnimator animator = ExtKt.moveMarkerSmoothly(marker, newLatLng);
+
+        animator.start();
+        float f = (float) SmartUtil.getAngle(new SmartLatLon(marker.getPosition().latitude, marker.getPosition().longitude), new SmartLatLon(newLatLng.latitude, newLatLng.longitude));
+        ExtKt.rotateMarker(marker, f, rotate);
+    }
+
+    public static void moveMarkerSmoothly(com.utsman.smartmarker.mapbox.Marker marker, com.mapbox.mapboxsdk.geometry.LatLng newLatLng, @Nullable Boolean rotate) {
+        marker.moveMarkerSmoothly(newLatLng, rotate);
+    }
+
     public static void moveMarkerSmoothly(final Marker marker, LatLng newLatLng) {
         ValueAnimator animator = ExtKt.moveMarkerSmoothly(marker, newLatLng);
 
         animator.start();
         float f = (float) SmartUtil.getAngle(new SmartLatLon(marker.getPosition().latitude, marker.getPosition().longitude), new SmartLatLon(newLatLng.latitude, newLatLng.longitude));
-        ExtKt.rotateMarker(marker, f);
+        ExtKt.rotateMarker(marker, f, true);
     }
 
     public static void moveMarkerSmoothly(com.utsman.smartmarker.mapbox.Marker marker, com.mapbox.mapboxsdk.geometry.LatLng newLatLng) {
-        marker.moveMarkerSmoothly(newLatLng);
+        marker.moveMarkerSmoothly(newLatLng, true);
     }
 }

@@ -19,6 +19,6 @@ package com.utsman.smartmarker
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.Marker
 
-fun Marker.moveMarkerSmoothly(newLatLng: LatLng) {
-    SmartMarker.moveMarkerSmoothly(this, newLatLng)
+fun Marker.moveMarkerSmoothly(newLatLng: LatLng, rotate: Boolean? = true) {
+    SmartMarker.moveMarkerSmoothly(this, newLatLng, rotate)
 }

@@ -22,6 +22,7 @@ import android.os.Handler
 import android.os.SystemClock
 import android.util.Log
 import android.view.animation.LinearInterpolator
+import androidx.annotation.Nullable
 import androidx.lifecycle.MutableLiveData
 import com.mapbox.geojson.Point
 import com.mapbox.mapboxsdk.geometry.LatLng
@@ -44,7 +45,7 @@ class Marker(private var currentLatLng: LatLng, private val jsonSource: GeoJsonS
         }
     }
 
-    fun moveMarkerSmoothly(newLatLng: LatLng) {
+    fun moveMarkerSmoothly(newLatLng: LatLng, @Nullable rotate: Boolean? = true) {
 
         if (animator != null && animator!!.isStarted) {
             currentLatLng = animator!!.animatedValue as LatLng
@@ -60,7 +61,10 @@ class Marker(private var currentLatLng: LatLng, private val jsonSource: GeoJsonS
 
 
         animator?.start()
-        rotateMarker(symbolLayer, getAngle(currentLatLng, newLatLng).toFloat())
+
+        if (rotate != null && rotate) {
+            rotateMarker(symbolLayer, getAngle(currentLatLng, newLatLng).toFloat())
+        }
     }
 
     private fun animatorUpdateListener(jsonSource: GeoJsonSource) : ValueAnimator.AnimatorUpdateListener {

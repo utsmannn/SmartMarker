@@ -62,7 +62,6 @@ class MainActivity : AppCompatActivity() {
         Mapbox.getInstance(this, "sk.eyJ1Ijoia3VjaW5nYXBlcyIsImEiOiJjazI1eXFqYzQxcGZjM25ueTZiMHU3aDl3In0.EfIuu2NSv2CacIKEhkXhCg")
         setContentView(R.layout.activity_main)
 
-
         locationWatcher = LocationWatcher(this)
         val googleMapsView = (google_map_view as SupportMapFragment)
         val mapboxMapsView = findViewById<MapView>(R.id.mapbox_view)
@@ -184,7 +183,6 @@ class MainActivity : AppCompatActivity() {
                 .zoom(15.0)
                 .build()
 
-
             //mapboxMap?.animateCamera(com.mapbox.mapboxsdk.camera.CameraUpdateFactory.newCameraPosition(position))
         }
 
@@ -200,11 +198,11 @@ class MainActivity : AppCompatActivity() {
 
             override fun newLocation(newLocation: Location) {
                 googleMarker?.let { marker ->
-                    //SmartMarker.moveMarkerSmoothly(marker, newLocation.toLatLngGoogle())
+                    SmartMarker.moveMarkerSmoothly(marker, newLocation.toLatLngGoogle())
                 }
 
                 mapboxMarker?.let { marker ->
-                    //SmartMarker.moveMarkerSmoothly(marker, newLocation.toLatLngMapbox())
+                    SmartMarker.moveMarkerSmoothly(marker, newLocation.toLatLngMapbox())
                 }
             }
 

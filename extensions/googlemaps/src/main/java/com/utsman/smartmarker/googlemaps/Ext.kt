@@ -33,25 +33,28 @@ import com.google.android.gms.maps.model.Marker
 
 fun Location.toLatLngGoogle() = LatLng(latitude, longitude)
 
-fun rotateMarker(marker: Marker, toRotation: Float) {
-    val handler = Handler()
-    val start = SystemClock.uptimeMillis()
-    val startRotation = marker.rotation
-    val duration: Long = 300
+fun rotateMarker(marker: Marker, toRotation: Float, rotate: Boolean? = true) {
 
-    handler.post(object : Runnable {
-        override fun run() {
-            val elapsed = SystemClock.uptimeMillis() - start
-            val t = LinearInterpolator().getInterpolation(elapsed.toFloat() / duration)
+    if (rotate != null && rotate) {
+        val handler = Handler()
+        val start = SystemClock.uptimeMillis()
+        val startRotation = marker.rotation
+        val duration: Long = 300
 
-            val rot = t * toRotation + (1 - t) * startRotation
+        handler.post(object : Runnable {
+            override fun run() {
+                val elapsed = SystemClock.uptimeMillis() - start
+                val t = LinearInterpolator().getInterpolation(elapsed.toFloat() / duration)
 
-            marker.rotation = if (-rot > 180) rot / 2 else rot
-            if (t < 1.0) {
-                handler.postDelayed(this, 16)
+                val rot = t * toRotation + (1 - t) * startRotation
+
+                marker.rotation = if (-rot > 180) rot / 2 else rot
+                if (t < 1.0) {
+                    handler.postDelayed(this, 16)
+                }
             }
-        }
-    })
+        })
+    }
 }
 
 fun bitmapFromVector(context: Context, @DrawableRes icon: Int): BitmapDescriptor {
