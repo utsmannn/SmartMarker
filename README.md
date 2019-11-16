@@ -32,7 +32,7 @@ implementation 'com.utsman.smartmarker:ext-googlemaps:1.1.5@aar'
 implementation 'com.utsman.smartmarker:ext-mapbox:1.1.5@aar'
 
 ```
-For extensions, you don't need to add mapbox extensions if you don't use the sdk mapbox. As well as the google map sdk.
+For extensions, you don't need to add mapbox extensions if you not use the sdk mapbox. As well as the google map sdk.
 
 ## Add Marker
 ### Google Maps
