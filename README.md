@@ -23,13 +23,13 @@
 ```groovy
 
 // the core library
-implementation 'com.utsman.smartmarker:core:1.0.4@aar'
+implementation 'com.utsman.smartmarker:core:1.1.5@aar'
 
 // extension for google maps
-implementation 'com.utsman.smartmarker:ext-googlemaps:1.0.4@aar'
+implementation 'com.utsman.smartmarker:ext-googlemaps:1.1.5@aar'
 
 // extension for Mapbox
-implementation 'com.utsman.smartmarker:ext-mapbox:1.0.4@aar'
+implementation 'com.utsman.smartmarker:ext-mapbox:1.1.5@aar'
 
 ```
 For extensions, you don't need to add mapbox extensions if you don't use the sdk mapbox. As well as the google map sdk.
@@ -80,7 +80,7 @@ marker.moveMarkerSmoothly(latLng, false)
 I create location extensions for get your location every second with old location and new location (delay 30 millisecond). <br>
 Just add this extensions 
 ```groovy
-implementation 'com.utsman.smartmarker:ext-location:1.0.4@aar'
+implementation 'com.utsman.smartmarker:ext-location:1.1.5@aar'
 
 // for extensions watcher location, you need some library with latest versions
 implementation 'com.google.android.gms:play-services-location:17.0.0'

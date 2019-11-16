@@ -104,7 +104,7 @@ class Marker(private var currentLatLng: LatLng,
         handler.post(object : Runnable {
             override fun run() {
                 val elapsed = SystemClock.uptimeMillis() - start
-                val t = LinearInterpolator().getInterpolation(elapsed.toFloat() / duration)
+                val t = LinearInterpolator().getInterpolation( elapsed.toFloat() / duration)
 
                 try {
                     val rot = t * toRotation + (1 - t) * startRotation
