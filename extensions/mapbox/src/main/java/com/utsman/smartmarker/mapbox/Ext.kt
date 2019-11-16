@@ -19,14 +19,8 @@ package com.utsman.smartmarker.mapbox
 import android.animation.TypeEvaluator
 import android.location.Location
 import android.util.Log
-import android.widget.Adapter
-import android.widget.ArrayAdapter
 import com.mapbox.mapboxsdk.geometry.LatLng
 import com.mapbox.mapboxsdk.maps.MapboxMap
-import com.mapbox.mapboxsdk.maps.Style
-import com.mapbox.mapboxsdk.style.layers.SymbolLayer
-import com.utsman.kemana.maputil.MarkerBuilder
-import com.utsman.kemana.maputil.addMarker
 
 fun Location.toLatLngMapbox() = LatLng(latitude, longitude)
 
@@ -40,23 +34,6 @@ val latLngEvaluator = object : TypeEvaluator<LatLng> {
     }
 }
 
-
-
-fun MapboxMap.addMarkers(vararg markerOptionss: MarkerOptions): MutableList<Marker> {
-    val list: MutableList<Marker> = mutableListOf()
-    markerOptionss.map { markerOptions ->
-        val markerBuilder = MarkerBuilder(markerOptions.context!!, style)
-        val marker = markerBuilder.newMarker(markerOptions.id!!, markerOptions.latLng!!, markerOptions.icon!!, markerOptions.vector!!)
-        markerOptions.symbolLayer?.invoke(marker)
-        style?.addMarker(marker)
-
-        val jsonSource = markerBuilder.jsonSource
-        val mark = Marker(markerOptions.latLng, jsonSource, marker, markerOptions.id)
-        list.add(mark)
-    }
-    return list
-}
-
 fun MapboxMap.addMarker(vararg markerOptions: MarkerOptions): MarkerLayer {
     //val list: MarkerLayer = mutableListOf<Marker>() as MarkerLayer
     val markerLayer = MarkerLayer()
@@ -67,7 +44,7 @@ fun MapboxMap.addMarker(vararg markerOptions: MarkerOptions): MarkerLayer {
         style?.addMarker(marker)
 
         val jsonSource = markerBuilder.jsonSource
-        val mark = Marker(options.latLng, jsonSource, marker, options.id)
+        val mark = Marker(options.latLng, this, jsonSource, marker, options.id)
         markerLayer.add(mark)
     }
     return markerLayer

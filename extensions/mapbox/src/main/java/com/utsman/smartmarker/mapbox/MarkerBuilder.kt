@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.utsman.kemana.maputil
+package com.utsman.smartmarker.mapbox
 
 import android.content.Context
 import android.graphics.Bitmap
@@ -30,8 +30,6 @@ import com.mapbox.mapboxsdk.style.layers.PropertyFactory
 import com.mapbox.mapboxsdk.style.layers.SymbolLayer
 import com.mapbox.mapboxsdk.style.sources.GeoJsonSource
 import com.mapbox.mapboxsdk.utils.BitmapUtils
-import com.utsman.smartmarker.mapbox.MarkerOptions
-import com.utsman.smartmarker.mapbox.R
 
 class MarkerBuilder(private val context: Context, private val style: Style?) {
 

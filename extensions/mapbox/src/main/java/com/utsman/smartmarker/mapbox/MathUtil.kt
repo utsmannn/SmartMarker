@@ -22,7 +22,7 @@ import kotlin.math.cos
 import kotlin.math.sin
 
 object MathUtil {
-    fun computeHeading(from: LatLng, to: LatLng): Double {
+    fun computeHeading(from: LatLng, to: LatLng, fromN: Double): Double {
         val fromLat = Math.toRadians(from.latitude)
         val fromLng = Math.toRadians(from.longitude)
         val toLat = Math.toRadians(to.latitude)
@@ -32,7 +32,7 @@ object MathUtil {
             sin(dLng) * cos(toLat),
             cos(fromLat) * sin(toLat) - sin(fromLat) * cos(toLat) * cos(dLng)
         )
-        return wrap(Math.toDegrees(heading), -180.0, 180.0)
+        return wrap(Math.toDegrees(heading) - fromN, -180.0, 180.0)
     }
 
     private fun wrap(n: Double, min: Double, max: Double): Double {

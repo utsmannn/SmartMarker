@@ -28,7 +28,7 @@ ext {
 
     publishedGroupId = 'com.utsman.smartmarker'
     artifact = 'ext-googlemaps'
-    libraryVersion = '1.0.4'
+    libraryVersion = '1.1.5'
 
     libraryDescription = 'Smart Marker for Google Maps and Mapbox'
     siteUrl = 'https://github.com/utsmannn/SmartMarker'

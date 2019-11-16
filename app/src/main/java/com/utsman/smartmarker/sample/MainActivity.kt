@@ -36,7 +36,6 @@ import com.utsman.smartmarker.googlemaps.toLatLngGoogle
 import com.utsman.smartmarker.location.LocationUpdateListener
 import com.utsman.smartmarker.location.LocationWatcher
 import com.utsman.smartmarker.mapbox.addMarker
-import com.utsman.smartmarker.mapbox.addMarkers
 import com.utsman.smartmarker.mapbox.toLatLngMapbox
 import com.utsman.smartmarker.moveMarkerSmoothly
 import io.reactivex.Observable
@@ -59,7 +58,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        Mapbox.getInstance(this, "sk.eyJ1Ijoia3VjaW5nYXBlcyIsImEiOiJjazI1eXFqYzQxcGZjM25ueTZiMHU3aDl3In0.EfIuu2NSv2CacIKEhkXhCg")
+        Mapbox.getInstance(this, "sk.eyJ1Ijoia3VjaW5nYXBlcyIsImEiOiJjazMxaTMwdnUwNmZhM2RxZnN3MXB3NXVxIn0.SbImlZrtwRkxSpk-1h0h3A")
         setContentView(R.layout.activity_main)
 
         locationWatcher = LocationWatcher(this)
@@ -74,25 +73,13 @@ class MainActivity : AppCompatActivity() {
             googleMapsView.getMapAsync {  map ->
                 googleMap = map
 
-                val bndung = LatLng(-6.914744, 107.609810)
-                val bks = LatLng(-6.241586, 106.992416)
-
                 val markerOption = MarkerOptions()
-                    .position(bndung)
+                    .position(loc.toLatLngGoogle())
                     .icon(bitmapFromVector(this@MainActivity, R.drawable.ic_marker_direction_2))
 
-                val markerOption2 = MarkerOptions()
-                    .position(bks)
-                    .icon(bitmapFromVector(this@MainActivity, R.drawable.ic_marker_direction_2))
+                googleMarker = map.addMarker(markerOption)
 
-                //googleMarker = map.addMarker(markerOption)
-                val mar1 = map.addMarker(markerOption)
-                val mar2 = map.addMarker(markerOption2)
 
-                btn_test_gmaps.setOnClickListener {
-                    mar1.moveMarkerSmoothly(bks)
-                    mar2.moveMarkerSmoothly(bndung)
-                }
                 map.animateCamera(CameraUpdateFactory.newLatLngZoom(loc.toLatLngGoogle(), 17f))
             }
 
@@ -197,9 +184,8 @@ class MainActivity : AppCompatActivity() {
             }
 
             override fun newLocation(newLocation: Location) {
-                googleMarker?.let { marker ->
-                    SmartMarker.moveMarkerSmoothly(marker, newLocation.toLatLngGoogle())
-                }
+                googleMarker?.moveMarkerSmoothly(newLocation.toLatLngGoogle())
+
 
                 mapboxMarker?.let { marker ->
                     SmartMarker.moveMarkerSmoothly(marker, newLocation.toLatLngMapbox())

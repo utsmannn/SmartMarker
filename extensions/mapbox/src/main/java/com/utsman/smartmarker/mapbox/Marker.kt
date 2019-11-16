@@ -24,14 +24,20 @@ import android.util.Log
 import android.view.animation.LinearInterpolator
 import androidx.annotation.Nullable
 import androidx.lifecycle.MutableLiveData
+import com.mapbox.android.gestures.RotateGestureDetector
 import com.mapbox.geojson.Point
 import com.mapbox.mapboxsdk.geometry.LatLng
+import com.mapbox.mapboxsdk.maps.MapboxMap
 import com.mapbox.mapboxsdk.maps.Style
 import com.mapbox.mapboxsdk.style.layers.PropertyFactory
 import com.mapbox.mapboxsdk.style.layers.SymbolLayer
 import com.mapbox.mapboxsdk.style.sources.GeoJsonSource
 
-class Marker(private var currentLatLng: LatLng, private val jsonSource: GeoJsonSource, private val symbolLayer: SymbolLayer, private val idMarker: String) {
+class Marker(private var currentLatLng: LatLng,
+             private val mapboxMap: MapboxMap,
+             private val jsonSource: GeoJsonSource,
+             private val symbolLayer: SymbolLayer,
+             private val idMarker: String) {
 
     private val liveRotate = MutableLiveData<Float>()
     private var animator: ValueAnimator? = null
@@ -41,7 +47,6 @@ class Marker(private var currentLatLng: LatLng, private val jsonSource: GeoJsonS
         liveRotate.postValue(0f)
         liveRotate.observeForever {
             symbolLayer.withProperties(PropertyFactory.iconRotate(it))
-
         }
     }
 
@@ -63,7 +68,22 @@ class Marker(private var currentLatLng: LatLng, private val jsonSource: GeoJsonS
         animator?.start()
 
         if (rotate != null && rotate) {
-            rotateMarker(symbolLayer, getAngle(currentLatLng, newLatLng).toFloat())
+            mapboxMap.addOnRotateListener(object : MapboxMap.OnRotateListener {
+                override fun onRotate(detector: RotateGestureDetector) {
+
+                }
+
+                override fun onRotateEnd(detector: RotateGestureDetector) {
+
+                }
+
+                override fun onRotateBegin(detector: RotateGestureDetector) {
+
+                }
+
+            })
+
+            rotateMarker(symbolLayer, (getAngle(currentLatLng, newLatLng)).toFloat())
         }
     }
 
@@ -78,6 +98,7 @@ class Marker(private var currentLatLng: LatLng, private val jsonSource: GeoJsonS
         val handler = Handler()
         val start = SystemClock.uptimeMillis()
         var startRotation = symbolLayer?.iconRotate?.value ?: 90f
+        //var startRotation = mapboxMap.cameraPosition.bearing.toFloat()
         val duration: Long = 200
 
         handler.post(object : Runnable {
@@ -90,14 +111,14 @@ class Marker(private var currentLatLng: LatLng, private val jsonSource: GeoJsonS
 
                     val rotation = if (-rot > 180) rot / 2 else rot
                     liveRotate.postValue(rotation)
-                    startRotation = liveRotate.value ?: 0f
+                    //startRotation = liveRotate.value ?: 0f
+                    startRotation = rotation ?: 0f
                     if (t < 1.0) {
                         handler.postDelayed(this, 100)
                     }
                 } catch (e: IllegalStateException) {
                     Log.e("smartmarker-mapbox", "set rotation failed")
                 }
-
 
             }
         })
@@ -106,9 +127,15 @@ class Marker(private var currentLatLng: LatLng, private val jsonSource: GeoJsonS
     private fun getAngle(fromLatLng: LatLng, toLatLng: LatLng) : Double {
         var heading = 0.0
         if (fromLatLng != toLatLng) {
-            heading = MathUtil.computeHeading(fromLatLng, toLatLng)
+            val mapRot = mapboxMap.cameraPosition.bearing
+
+            heading = MathUtil.computeHeading(fromLatLng, toLatLng, mapRot)
+
+            logi("angle is --> $heading -- $mapRot")
         }
 
         return heading
     }
+
+    fun logi(msg: String?) = Log.i("anjay", msg)
 }
