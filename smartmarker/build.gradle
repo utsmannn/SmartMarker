@@ -17,53 +17,9 @@
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
-apply plugin: 'com.jfrog.bintray'
-apply plugin: 'com.github.dcendents.android-maven'
 
 ext {
-    bintrayRepo = "utsman"
-    bintrayName = "com.utsman.smartmarker"
-
-    libraryName = 'smartmarker'
-
-    publishedGroupId = 'com.utsman.smartmarker'
     artifact = 'core'
-    libraryVersion = '1.1.5'
-
-    libraryDescription = 'Smart Marker for Google Maps and Mapbox'
-    siteUrl = 'https://github.com/utsmannn/SmartMarker'
-    gitUrl = 'https://github.com/utsmannn/SmartMarker.git'
-    developerId = 'utsman'
-    developerName = 'Muhammad Utsman'
-    developerEmail = 'kucingapes@gmail.com'
-    licenseName = 'The Apache Software License, Version 2.0'
-    licenseUrl = 'https://www.apache.org/licenses/LICENSE-2.0.txt'
-    allLicenses = ["Apache-2.0"]
-
-}
-
-android {
-    compileSdkVersion 29
-    buildToolsVersion "29.0.2"
-
-
-    defaultConfig {
-        minSdkVersion 16
-        targetSdkVersion 29
-        versionCode 1
-        versionName "1.1.5"
-
-        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
-        consumerProguardFiles 'consumer-rules.pro'
-    }
-
-    buildTypes {
-        release {
-            minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-        }
-    }
-
 }
 
 dependencies {
@@ -75,7 +31,4 @@ dependencies {
     implementation project(Module.extMapbox)
 }
 
-if (project.rootProject.file('local.properties').exists()) {
-    apply from: 'https://raw.githubusercontent.com/nuuneoi/JCenter/master/installv1.gradle'
-    apply from: 'https://raw.githubusercontent.com/nuuneoi/JCenter/master/bintrayv1.gradle'
-}
+apply from: '../base.gradle'

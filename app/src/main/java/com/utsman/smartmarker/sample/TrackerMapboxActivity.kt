@@ -206,7 +206,7 @@ class TrackerMapboxActivity : AppCompatActivity() {
     }
 
     private fun updateLocation() {
-        locationWatcher.getLocationUpdate(this, object : LocationUpdateListener {
+        locationWatcher.getLocationUpdate(this, LocationWatcher.Priority.JEDI, object : LocationUpdateListener {
             override fun oldLocation(oldLocation: Location) {
 
             }

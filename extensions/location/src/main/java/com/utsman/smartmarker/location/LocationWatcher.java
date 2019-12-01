@@ -44,6 +44,15 @@ public class LocationWatcher {
     private Context context;
     private CompositeDisposable compositeDisposable;
 
+    public static class Priority {
+        public static long JEDI = 3;
+        public static long VERY_HIGH = 30;
+        public static long HIGH = 50;
+        public static long MEDIUM = 300;
+        public static long LOW = 3000;
+        public static long VERY_LOW = 8000;
+    }
+
     public LocationWatcher(Context context) {
         compositeDisposable = new CompositeDisposable();
         this.context = context;
@@ -104,13 +113,13 @@ public class LocationWatcher {
         compositeDisposable.add(locationDisposable);
     }
 
-    public void getLocationUpdate(final Activity activity, final LocationUpdateListener locationUpdateListener) {
+    public void getLocationUpdate(final Activity activity, final long priority, final LocationUpdateListener locationUpdateListener) {
         Dexter.withActivity(activity)
                 .withPermission(Manifest.permission.ACCESS_FINE_LOCATION)
                 .withListener(new PermissionListener() {
                     @Override
                     public void onPermissionGranted(PermissionGrantedResponse response) {
-                        getLocationUpdate(locationUpdateListener);
+                        getLocationUpdate(priority, locationUpdateListener);
                     }
 
                     @Override
@@ -126,7 +135,7 @@ public class LocationWatcher {
                 .check();
     }
 
-    public void getLocationUpdate(final LocationUpdateListener locationUpdateListener) {
+    public void getLocationUpdate(long priority, final LocationUpdateListener locationUpdateListener) {
         LocationRequest request = LocationRequest.create()
                 .setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY)
                 .setInterval(100);
@@ -141,7 +150,7 @@ public class LocationWatcher {
                         locationUpdateListener.oldLocation(location);
                     }
                 })
-                .delay(30, TimeUnit.MILLISECONDS)
+                .delay(priority, TimeUnit.MILLISECONDS)
                 .observeOn(AndroidSchedulers.mainThread())
                 .doOnNext(new Consumer<Location>() {
                     @Override
