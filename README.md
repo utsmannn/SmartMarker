@@ -12,6 +12,8 @@
     - [Mapbox](https://github.com/utsmannn/SmartMarker#mapbox)
 - [Move Marker](https://github.com/utsmannn/SmartMarker#move-your-marker)
 - [Location Watcher](https://github.com/utsmannn/SmartMarker#location-watcher-extension)
+    - [Installation](https://github.com/utsmannn/SmartMarker#installation)
+    - [Realtime Level](https://github.com/utsmannn/SmartMarker#realtime-level)
     - [Use](https://github.com/utsmannn/SmartMarker#use)
     - [Permission Helper](https://github.com/utsmannn/SmartMarker#permission-helper)
 - [Other Extensions](https://github.com/utsmannn/SmartMarker#other-extensions)
@@ -23,13 +25,13 @@
 ```groovy
 
 // the core library
-implementation 'com.utsman.smartmarker:core:1.1.5@aar'
+implementation 'com.utsman.smartmarker:core:1.2.5@aar'
 
 // extension for google maps
-implementation 'com.utsman.smartmarker:ext-googlemaps:1.1.5@aar'
+implementation 'com.utsman.smartmarker:ext-googlemaps:1.2.5@aar'
 
 // extension for Mapbox
-implementation 'com.utsman.smartmarker:ext-mapbox:1.1.5@aar'
+implementation 'com.utsman.smartmarker:ext-mapbox:1.2.5@aar'
 
 ```
 For extensions, you don't need to add mapbox extensions if you not use the sdk mapbox. As well as the google map sdk.
@@ -77,10 +79,11 @@ marker.moveMarkerSmoothly(latLng, false)
 ```
 
 ## Location Watcher Extension
-I create location extensions for get your location every second with old location and new location (delay 30 millisecond). <br>
-Just add this extensions 
+I create location extensions for get your location every second with old location and new location, you can setup realtime level. <br>
+
+### Installation
 ```groovy
-implementation 'com.utsman.smartmarker:ext-location:1.1.5@aar'
+implementation 'com.utsman.smartmarker:ext-location:1.2.5@aar'
 
 // for extensions watcher location, you need some library with latest versions
 implementation 'com.google.android.gms:play-services-location:17.0.0'
@@ -89,6 +92,19 @@ implementation 'io.reactivex.rxjava2:rxjava:2.2.12'
 implementation 'io.reactivex.rxjava2:rxandroid:2.1.1'
 implementation 'com.karumi:dexter:6.0.0'
 ```
+
+### Realtime Level
+You can setup realtime level for get every second update, `locationWatcher.getLocationUpdate(priority, listener)`
+
+
+| level | ms |
+| -- | -- |
+| `LocationWatcher.Priority.JEDI` | 3 ms |
+| `LocationWatcher.Priority.VERY_HIGH` | 30 ms |
+| `LocationWatcher.Priority.HIGH` | 50 ms |
+| `LocationWatcher.Priority.MEDIUM` | 300 ms |
+| `LocationWatcher.Priority.LOW` | 3000 ms |
+| `LocationWatcher.Priority.VERY_LOW` | 8000 ms |
 
 ### Use
 ```kotlin
@@ -101,7 +117,7 @@ locationWatcher.getLocation { location ->
 }
 
 // get location update every second
-locationWatcher.getLocationUpdate(object : LocationUpdateListener {
+locationWatcher.getLocationUpdate(LocationWatcher.Priority.HIGH, object : LocationUpdateListener {
     override fun oldLocation(oldLocation: Location?) {
         // your location realtime result
     }
@@ -132,7 +148,7 @@ locationWatcher.getLocation(context) { location ->
 }
 
 // get location update every second with permission helper
-locationWatcher.getLocationUpdate(context, object : LocationUpdateListener {
+locationWatcher.getLocationUpdate(context, LocationWatcher.Priority.HIGH, object : LocationUpdateListener {
     override fun oldLocation(oldLocation: Location?) {
         // your location realtime result
     }
@@ -192,7 +208,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         // device tracker
-        locationWatcher.getLocationUpdate(this, object : LocationUpdateListener {
+        locationWatcher.getLocationUpdate(this, LocationWatcher.Priority.HIGH, object : LocationUpdateListener {
             override fun oldLocation(oldLocation: Location) {
 
             }
@@ -247,7 +263,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         // device tracker
-        locationWatcher.getLocationUpdate(this, object : LocationUpdateListener {
+        locationWatcher.getLocationUpdate(this, LocationWatcher.Priority.HIGH, object : LocationUpdateListener {
             override fun oldLocation(oldLocation: Location) {
 
             }
