@@ -41,7 +41,6 @@ class MarkerBuilder(private val context: Context, private val style: Style?) {
 
     internal fun newMarker(id: String, latLng: LatLng, @DrawableRes iconVector: Int, vector: Boolean = false): SymbolLayer {
         val symbolLayer = newSymbol(id)
-        //val markerUtil = MarkerOptions(context, style)
 
         jsonSource = GeoJsonSource(
             "source-$id",

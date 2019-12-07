@@ -35,7 +35,6 @@ val latLngEvaluator = object : TypeEvaluator<LatLng> {
 }
 
 fun MapboxMap.addMarker(vararg markerOptions: MarkerOptions): MarkerLayer {
-    //val list: MarkerLayer = mutableListOf<Marker>() as MarkerLayer
     val markerLayer = MarkerLayer()
     markerOptions.map { options ->
         val markerBuilder = MarkerBuilder(options.context!!, style)
@@ -45,6 +44,9 @@ fun MapboxMap.addMarker(vararg markerOptions: MarkerOptions): MarkerLayer {
 
         val jsonSource = markerBuilder.jsonSource
         val mark = Marker(options.latLng, this, jsonSource, marker, options.id)
+        options.rotation?.let { rot ->
+            mark.rotateMarker(rot)
+        }
         markerLayer.add(mark)
     }
     return markerLayer
@@ -56,11 +58,6 @@ class MarkerLayer {
     private val markers: MutableList<Marker> = mutableListOf()
 
     fun add(marker: Marker) = apply { markers.add(marker) }
-    /*fun get(id: String) = try {
-        markers.single { id == it.getId() }
-    } catch (e: NoSuchElementException) {
-
-    }*/
 
     fun get(id: String): Marker? {
         return try {

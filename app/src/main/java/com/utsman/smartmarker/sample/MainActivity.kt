@@ -22,7 +22,6 @@ import androidx.appcompat.app.AppCompatActivity
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.SupportMapFragment
-import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
 import com.mapbox.mapboxsdk.Mapbox
@@ -102,8 +101,8 @@ class MainActivity : AppCompatActivity() {
                      * */
                     val markerOptions = com.utsman.smartmarker.mapbox.MarkerOptions.Builder()
                         .setId("id")
-                        .addIcon(R.drawable.mapbox_marker_icon_default)
-                        .addPosition(loc.toLatLngMapbox())
+                        .setIcon(R.drawable.mapbox_marker_icon_default)
+                        .setPosition(loc.toLatLngMapbox())
                         .build(this)
 
                     val bnd = com.mapbox.mapboxsdk.geometry.LatLng(-6.914744, 107.609810)
@@ -113,19 +112,19 @@ class MainActivity : AppCompatActivity() {
 
                     val markerOptions1 = com.utsman.smartmarker.mapbox.MarkerOptions.Builder()
                         .setId("jgja")
-                        .addIcon(R.drawable.ic_marker_direction_2, true)
-                        .addPosition(jgkt)
+                        .setIcon(R.drawable.ic_marker_direction_2, true)
+                        .setPosition(jgkt)
                         .build(this)
 
                     val markerOptions2 = com.utsman.smartmarker.mapbox.MarkerOptions.Builder()
                         .setId("bks")
-                        .addIcon(R.drawable.ic_marker_direction_2, true)
-                        .addPosition(bks)
+                        .setIcon(R.drawable.ic_marker_direction_2, true)
+                        .setPosition(bks)
                         .build(this)
 
                     val markerOptions3 = com.utsman.smartmarker.mapbox.MarkerOptions.Builder()
                         .setId("btn")
-                        .addPosition(btn)
+                        .setPosition(btn)
                         .build(this)
 
                     //val markers = map.addMarkers(markerOptions1, markerOptions2, markerOptions3)

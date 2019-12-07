@@ -20,32 +20,13 @@ import android.content.Context
 import com.mapbox.mapboxsdk.geometry.LatLng
 import com.mapbox.mapboxsdk.style.layers.SymbolLayer
 
-// class FoodOrder private constructor(
-//   val bread: String?,
-//   val condiments: String?,
-//   val meat: String?,
-//   val fish: String?) {
-//
-//     data class Builder(
-//       var bread: String? = null,
-//       var condiments: String? = null,
-//       var meat: String? = null,
-//       var fish: String? = null) {
-//
-//         fun bread(bread: String) = apply { this.bread = bread }
-//         fun condiments(condiments: String) = apply { this.condiments = condiments }
-//         fun meat(meat: String) = apply { this.meat = meat }
-//         fun fish(fish: String) = apply { this.fish = fish }
-//         fun build() = FoodOrder(bread, condiments, meat, fish)
-//     }
-// }
-
 class MarkerOptions private constructor(
     val context: Context?,
     val id: String?,
     val icon: Int?,
     val vector: Boolean?,
     val latLng: LatLng?,
+    val rotation: Double?,
     val symbolLayer: ((SymbolLayer) -> Unit)?) {
 
     data class Builder(
@@ -54,25 +35,20 @@ class MarkerOptions private constructor(
         private var icon: Int = R.drawable.mapbox_marker_icon_default,
         private var vector: Boolean? = false,
         private var latLng: LatLng? = null,
+        private var rotation: Double? = null,
         private var symbolLayer: ((SymbolLayer) -> Unit)? = null
     ) {
         fun setId(id: String) = apply { this.id = id }
-        fun addIcon(icon: Int, vector: Boolean? = false) = apply {
+        fun setIcon(icon: Int, vector: Boolean? = false) = apply {
             this.icon = icon
             this.vector = vector
         }
-        fun addPosition(latLng: LatLng) = apply { this.latLng = latLng }
+        fun setPosition(latLng: LatLng) = apply { this.latLng = latLng }
+        fun setRotation(rotation: Double?) = apply { this.rotation = rotation }
         fun withSymbolLayer(symbolLayer: ((SymbolLayer) -> Unit)) = apply { this.symbolLayer = symbolLayer }
 
-        fun build(context: Context) = MarkerOptions(context, id, icon, vector, latLng, symbolLayer)
+        fun build(context: Context) = MarkerOptions(context, id, icon, vector, latLng, rotation, symbolLayer)
     }
-
-
-
-
-    /*fun Style.addMarker(context: Context, markerOptions: MarkerOptions): Marker {
-        val markerBuilder = MarkerBuilder.Builder(context).build()
-    }*/
 
 }
 

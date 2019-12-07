@@ -22,16 +22,17 @@
     - [Mapbox Activity](https://github.com/utsmannn/SmartMarker#mapbox-1)
 
 ## Download
+[ ![Download](https://api.bintray.com/packages/kucingapes/utsman/com.utsman.smartmarker/images/download.svg) ](https://bintray.com/kucingapes/utsman/com.utsman.smartmarker/_latestVersion) <br>
 ```groovy
 
 // the core library
-implementation 'com.utsman.smartmarker:core:1.2.5@aar'
+implementation 'com.utsman.smartmarker:core:1.2.8@aar'
 
 // extension for google maps
-implementation 'com.utsman.smartmarker:ext-googlemaps:1.2.5@aar'
+implementation 'com.utsman.smartmarker:ext-googlemaps:1.2.8@aar'
 
 // extension for Mapbox
-implementation 'com.utsman.smartmarker:ext-mapbox:1.2.5@aar'
+implementation 'com.utsman.smartmarker:ext-mapbox:1.2.8@aar'
 
 ```
 For extensions, you don't need to add mapbox extensions if you not use the sdk mapbox. As well as the google map sdk.

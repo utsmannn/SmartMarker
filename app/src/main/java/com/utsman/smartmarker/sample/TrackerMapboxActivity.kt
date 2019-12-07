@@ -18,7 +18,6 @@ package com.utsman.smartmarker.sample
 
 import android.location.Location
 import android.os.Bundle
-import android.os.Handler
 import androidx.appcompat.app.AppCompatActivity
 import com.mapbox.android.gestures.RotateGestureDetector
 import com.mapbox.mapboxsdk.Mapbox
@@ -100,8 +99,8 @@ class TrackerMapboxActivity : AppCompatActivity() {
                 locationWatcher.getLocation(this) { location ->
                     val markerOptions = MarkerOptions.Builder()
                         .setId("id")
-                        .addIcon(R.drawable.ic_marker_direction_2, true)
-                        .addPosition(location.toLatLngMapbox())
+                        .setIcon(R.drawable.ic_marker_direction_2, true)
+                        .setPosition(location.toLatLngMapbox())
                         .build(this)
 
                     marker1 = mapboxMap.addMarker(markerOptions).get("id")
@@ -138,8 +137,8 @@ class TrackerMapboxActivity : AppCompatActivity() {
                 locationWatcher.getLocation(this) { location ->
                     val markerOptions = MarkerOptions.Builder()
                         .setId("id")
-                        .addIcon(R.drawable.ic_marker_direction_2, true)
-                        .addPosition(location.toLatLngMapbox())
+                        .setIcon(R.drawable.ic_marker_direction_2, true)
+                        .setPosition(location.toLatLngMapbox())
                         .build(this)
 
                     marker2 = mapboxMap.addMarker(markerOptions).get("id")

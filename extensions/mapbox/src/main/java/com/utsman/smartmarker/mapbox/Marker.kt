@@ -41,7 +41,9 @@ class Marker(private var currentLatLng: LatLng,
 
     private val liveRotate = MutableLiveData<Float>()
     private var animator: ValueAnimator? = null
+    private var heading = 0.0
     fun getId() = idMarker
+    fun getRotation() = heading
 
     init {
         liveRotate.postValue(0f)
@@ -50,8 +52,11 @@ class Marker(private var currentLatLng: LatLng,
         }
     }
 
-    fun moveMarkerSmoothly(newLatLng: LatLng, @Nullable rotate: Boolean? = true) {
+    internal fun rotateMarker(rotate: Double?) {
+        symbolLayer.withProperties(PropertyFactory.iconRotate(rotate?.toFloat()))
+    }
 
+    fun moveMarkerSmoothly(newLatLng: LatLng, @Nullable rotate: Boolean? = true) {
         if (animator != null && animator!!.isStarted) {
             currentLatLng = animator!!.animatedValue as LatLng
             animator!!.cancel()
@@ -62,7 +67,7 @@ class Marker(private var currentLatLng: LatLng,
             addUpdateListener(animatorUpdateListener(jsonSource))
         }
 
-        Log.i("anjay simbol -->", "${symbolLayer?.id}")
+        Log.i("layer symbol id ->", "${symbolLayer?.id}")
 
 
         animator?.start()
@@ -98,7 +103,6 @@ class Marker(private var currentLatLng: LatLng,
         val handler = Handler()
         val start = SystemClock.uptimeMillis()
         var startRotation = symbolLayer?.iconRotate?.value ?: 90f
-        //var startRotation = mapboxMap.cameraPosition.bearing.toFloat()
         val duration: Long = 200
 
         handler.post(object : Runnable {
@@ -111,8 +115,7 @@ class Marker(private var currentLatLng: LatLng,
 
                     val rotation = if (-rot > 180) rot / 2 else rot
                     liveRotate.postValue(rotation)
-                    //startRotation = liveRotate.value ?: 0f
-                    startRotation = rotation ?: 0f
+                    startRotation = rotation
                     if (t < 1.0) {
                         handler.postDelayed(this, 100)
                     }
@@ -125,7 +128,6 @@ class Marker(private var currentLatLng: LatLng,
     }
 
     private fun getAngle(fromLatLng: LatLng, toLatLng: LatLng) : Double {
-        var heading = 0.0
         if (fromLatLng != toLatLng) {
             val mapRot = mapboxMap.cameraPosition.bearing
 
@@ -137,5 +139,5 @@ class Marker(private var currentLatLng: LatLng,
         return heading
     }
 
-    fun logi(msg: String?) = Log.i("anjay", msg)
+    private fun logi(msg: String?) = Log.i("anjay", msg)
 }
