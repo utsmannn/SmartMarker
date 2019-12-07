@@ -26,13 +26,13 @@
 ```groovy
 
 // the core library
-implementation 'com.utsman.smartmarker:core:1.2.8@aar'
+implementation 'com.utsman.smartmarker:core:1.2.9@aar'
 
 // extension for google maps
-implementation 'com.utsman.smartmarker:ext-googlemaps:1.2.8@aar'
+implementation 'com.utsman.smartmarker:ext-googlemaps:1.2.9@aar'
 
 // extension for Mapbox
-implementation 'com.utsman.smartmarker:ext-mapbox:1.2.8@aar'
+implementation 'com.utsman.smartmarker:ext-mapbox:1.2.9@aar'
 
 ```
 For extensions, you don't need to add mapbox extensions if you not use the sdk mapbox. As well as the google map sdk.
@@ -55,8 +55,9 @@ For Mapbox, adding marker is little hard, so I create helper for it, ***and you 
 // define marker options
 val markerOption = MarkerOptions.Builder() // from 'com.utsman.smartmarker.mapbox.MarkerOptions'
     .setId("marker-id")
-    .addIcon(R.drawable.ic_marker, true) // if marker is not vector, use 'false'
-    .addPosition(latLng)
+    .setIcon(R.drawable.ic_marker, true) // if marker is not vector, use 'false'
+    .setPosition(latLng)
+    .setRotation(rotation)
     .build(context)
 
 // define marker layer

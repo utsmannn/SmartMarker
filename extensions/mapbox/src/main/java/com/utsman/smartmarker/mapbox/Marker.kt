@@ -52,8 +52,8 @@ class Marker(private var currentLatLng: LatLng,
         }
     }
 
-    internal fun rotateMarker(rotate: Double?) {
-        symbolLayer.withProperties(PropertyFactory.iconRotate(rotate?.toFloat()))
+    internal fun rotateMarker(rotate: Double) {
+        rotateMarker(symbolLayer, rotate.toFloat())
     }
 
     fun moveMarkerSmoothly(newLatLng: LatLng, @Nullable rotate: Boolean? = true) {
