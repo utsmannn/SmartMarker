@@ -92,6 +92,8 @@ class Marker(private var currentLatLng: LatLng,
         }
     }
 
+    fun getLatLng() = currentLatLng
+
     private fun animatorUpdateListener(jsonSource: GeoJsonSource) : ValueAnimator.AnimatorUpdateListener {
         return ValueAnimator.AnimatorUpdateListener { value ->
             val animatedLatLng = value.animatedValue as LatLng
