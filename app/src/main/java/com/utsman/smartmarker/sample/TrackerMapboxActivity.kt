@@ -98,12 +98,12 @@ class TrackerMapboxActivity : AppCompatActivity() {
 
                 locationWatcher.getLocation(this) { location ->
                     val markerOptions = MarkerOptions.Builder()
-                        .setId("id")
+                        .setId("id", true)
                         .setIcon(R.drawable.ic_marker_direction_2, true)
                         .setPosition(location.toLatLngMapbox())
                         .build(this)
 
-                    marker1 = mapboxMap.addMarker(markerOptions).get("id")
+                    marker1 = mapboxMap.addMarker(markerOptions)
 
                     moveCamera(location, mapboxMap)
                     updateLocation()
@@ -141,7 +141,8 @@ class TrackerMapboxActivity : AppCompatActivity() {
                         .setPosition(location.toLatLngMapbox())
                         .build(this)
 
-                    marker2 = mapboxMap.addMarker(markerOptions).get("id")
+                    marker2 = mapboxMap.addMarker(markerOptions)
+                    logi("marker is  --> ${marker2?.getId()}")
 
                     moveCamera(location, mapboxMap)
                     updateLocation()

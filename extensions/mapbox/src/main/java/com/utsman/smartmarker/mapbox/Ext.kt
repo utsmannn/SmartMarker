@@ -34,11 +34,11 @@ val latLngEvaluator = object : TypeEvaluator<LatLng> {
     }
 }
 
-fun MapboxMap.addMarker(vararg markerOptions: MarkerOptions): MarkerLayer {
+fun MapboxMap.addMarkers(vararg markerOptions: MarkerOptions): MarkerLayer {
     val markerLayer = MarkerLayer()
     markerOptions.map { options ->
         val markerBuilder = MarkerBuilder(options.context!!, style)
-        val marker = markerBuilder.newMarker(options.id!!, options.latLng!!, options.icon!!, options.vector!!, options.requestUniqueId!!)
+        val marker = markerBuilder.newMarker(options.id!!, options.latLng!!, options.icon!!, options.vector!!)
         options.symbolLayer?.invoke(marker)
         style?.addMarker(marker)
 
@@ -52,6 +52,23 @@ fun MapboxMap.addMarker(vararg markerOptions: MarkerOptions): MarkerLayer {
     return markerLayer
 }
 
+fun MapboxMap.addMarker(options: MarkerOptions): Marker? {
+    val markerLayer = MarkerLayer()
+    val markerBuilder = MarkerBuilder(options.context!!, style)
+    val marker = markerBuilder.newMarker(options.id!!, options.latLng!!, options.icon!!, options.vector!!)
+    options.symbolLayer?.invoke(marker)
+    style?.addMarker(marker)
+    Log.i("marker is ", "added, markerId -> ${options.id}")
+
+    val jsonSource = markerBuilder.jsonSource
+    val mark = Marker(options.latLng, this, jsonSource, marker, options.id)
+    options.rotation?.let { rot ->
+        mark.rotateMarker(rot)
+    }
+    markerLayer.add(mark)
+    return markerLayer.get(options.id)
+}
+
 
 @Suppress("NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS")
 class MarkerLayer {
@@ -59,7 +76,7 @@ class MarkerLayer {
 
     fun add(marker: Marker) = apply { markers.add(marker) }
 
-    fun get(id: String): Marker? {
+    fun get(id: String?): Marker? {
         return try {
             markers.single { id == it.getId() }
         } catch (e: NoSuchElementException) {

@@ -21,14 +21,13 @@ import com.mapbox.mapboxsdk.geometry.LatLng
 import com.mapbox.mapboxsdk.style.layers.SymbolLayer
 
 class MarkerOptions private constructor(
-    val context: Context?,
-    val id: String?,
-    val requestUniqueId: Boolean?,
-    val icon: Int?,
-    val vector: Boolean?,
-    val latLng: LatLng?,
-    val rotation: Double?,
-    val symbolLayer: ((SymbolLayer) -> Unit)?) {
+    internal val context: Context?,
+    internal val id: String?,
+    internal val icon: Int?,
+    internal val vector: Boolean?,
+    internal val latLng: LatLng?,
+    internal val rotation: Double?,
+    internal val symbolLayer: ((SymbolLayer) -> Unit)?) {
 
     data class Builder(
         private var context: Context? = null,
@@ -40,10 +39,15 @@ class MarkerOptions private constructor(
         private var rotation: Double? = null,
         private var symbolLayer: ((SymbolLayer) -> Unit)? = null
     ) {
-        fun setId(id: String, requestUniqueId: Boolean? = false) = apply {
-            this.id = id
-            this.requestUniqueId = requestUniqueId
+
+        fun setId(id: String, requestUniqueId: Boolean = false) = apply {
+            if (requestUniqueId) {
+                this.id = "${id}_${System.currentTimeMillis()}"
+            } else {
+                this.id = id
+            }
         }
+
         fun setIcon(icon: Int, vector: Boolean? = false) = apply {
             this.icon = icon
             this.vector = vector
@@ -52,7 +56,7 @@ class MarkerOptions private constructor(
         fun setRotation(rotation: Double?) = apply { this.rotation = rotation }
         fun withSymbolLayer(symbolLayer: ((SymbolLayer) -> Unit)) = apply { this.symbolLayer = symbolLayer }
 
-        fun build(context: Context) = MarkerOptions(context, id, requestUniqueId, icon, vector, latLng, rotation, symbolLayer)
+        fun build(context: Context) = MarkerOptions(context, id, icon, vector, latLng, rotation, symbolLayer)
     }
 
 }

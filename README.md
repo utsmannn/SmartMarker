@@ -26,13 +26,13 @@
 ```groovy
 
 // the core library
-implementation 'com.utsman.smartmarker:core:1.2.11@aar'
+implementation 'com.utsman.smartmarker:core:1.3.12@aar'
 
 // extension for google maps
-implementation 'com.utsman.smartmarker:ext-googlemaps:1.2.11@aar'
+implementation 'com.utsman.smartmarker:ext-googlemaps:1.3.12@aar'
 
 // extension for Mapbox
-implementation 'com.utsman.smartmarker:ext-mapbox:1.2.11@aar'
+implementation 'com.utsman.smartmarker:ext-mapbox:1.3.12@aar'
 
 ```
 For extensions, you don't need to add mapbox extensions if you not use the sdk mapbox. As well as the google map sdk.
@@ -54,17 +54,14 @@ For Mapbox, adding marker is little hard, so I create helper for it, ***and you 
 ```kotlin
 // define marker options
 val markerOption = MarkerOptions.Builder() // from 'com.utsman.smartmarker.mapbox.MarkerOptions'
-    .setId("marker-id")
+    .setId("marker-id", true) // if marker id need unique id with timestamp, default is false
     .setIcon(R.drawable.ic_marker, true) // if marker is not vector, use 'false'
     .setPosition(latLng)
     .setRotation(rotation)
     .build(context)
 
-// define marker layer
-val markerLayer = map.addMarker(markerOption) // support vararg (multiple marker option)
-
-// and get your marker in markerLayer by id from marker options
-val marker = markerLayer.get("marker-id") // // this your marker
+// add your marker
+val marker = map.addMarker(markerOption)
 ```
 
 ## Move Your Marker

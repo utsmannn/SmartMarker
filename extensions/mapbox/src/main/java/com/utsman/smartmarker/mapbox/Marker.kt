@@ -37,7 +37,7 @@ class Marker(private var currentLatLng: LatLng,
              private val mapboxMap: MapboxMap,
              private val jsonSource: GeoJsonSource,
              private val symbolLayer: SymbolLayer,
-             private val idMarker: String) {
+             private val idMarker: String?) {
 
     private val liveRotate = MutableLiveData<Float>()
     private var animator: ValueAnimator? = null
@@ -66,9 +66,6 @@ class Marker(private var currentLatLng: LatLng,
             duration = 2000
             addUpdateListener(animatorUpdateListener(jsonSource))
         }
-
-        Log.i("layer symbol id ->", "${symbolLayer?.id}")
-
 
         animator?.start()
 

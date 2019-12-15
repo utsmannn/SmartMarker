@@ -129,14 +129,12 @@ class MainActivity : AppCompatActivity() {
 
                     //val markers = map.addMarkers(markerOptions1, markerOptions2, markerOptions3)
 
-                    val markers = map.addMarker(markerOptions3)
-
-                    val aa = markers.get("")
+                    val marker = map.addMarker(markerOptions3)
 
                     btn_test.setOnClickListener {
 
                         //markers.getId("btn").moveMarkerSmoothly(bks)
-                        markers.get("btn")?.moveMarkerSmoothly(bks)
+                        marker?.moveMarkerSmoothly(bks)
 
                         /*markers.filter {
                             it.getId() != "bks"
