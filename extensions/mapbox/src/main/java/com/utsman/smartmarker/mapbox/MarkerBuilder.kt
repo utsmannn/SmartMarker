@@ -39,11 +39,16 @@ class MarkerBuilder(private val context: Context, private val style: Style?) {
         return SymbolLayer("layer-$id", "source-$id")
     }
 
-    internal fun newMarker(id: String, latLng: LatLng, @DrawableRes iconVector: Int, vector: Boolean = false): SymbolLayer {
+    internal fun newMarker(id: String, latLng: LatLng, @DrawableRes iconVector: Int, vector: Boolean = false, requestUniqueId: Boolean = false): SymbolLayer {
         val symbolLayer = newSymbol(id)
+        val sourceId = if (requestUniqueId) {
+            "source_${id}_${System.currentTimeMillis()}"
+        } else {
+            "source_$id"
+        }
 
         jsonSource = GeoJsonSource(
-            "source-$id",
+            sourceId,
             Feature.fromGeometry(Point.fromLngLat(latLng.longitude, latLng.latitude))
         )
 

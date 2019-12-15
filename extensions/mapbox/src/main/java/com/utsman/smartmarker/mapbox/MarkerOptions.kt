@@ -23,6 +23,7 @@ import com.mapbox.mapboxsdk.style.layers.SymbolLayer
 class MarkerOptions private constructor(
     val context: Context?,
     val id: String?,
+    val requestUniqueId: Boolean?,
     val icon: Int?,
     val vector: Boolean?,
     val latLng: LatLng?,
@@ -32,13 +33,17 @@ class MarkerOptions private constructor(
     data class Builder(
         private var context: Context? = null,
         private var id: String? = null,
+        private var requestUniqueId: Boolean? = false,
         private var icon: Int = R.drawable.mapbox_marker_icon_default,
         private var vector: Boolean? = false,
         private var latLng: LatLng? = null,
         private var rotation: Double? = null,
         private var symbolLayer: ((SymbolLayer) -> Unit)? = null
     ) {
-        fun setId(id: String) = apply { this.id = id }
+        fun setId(id: String, requestUniqueId: Boolean? = false) = apply {
+            this.id = id
+            this.requestUniqueId = requestUniqueId
+        }
         fun setIcon(icon: Int, vector: Boolean? = false) = apply {
             this.icon = icon
             this.vector = vector
@@ -47,7 +52,7 @@ class MarkerOptions private constructor(
         fun setRotation(rotation: Double?) = apply { this.rotation = rotation }
         fun withSymbolLayer(symbolLayer: ((SymbolLayer) -> Unit)) = apply { this.symbolLayer = symbolLayer }
 
-        fun build(context: Context) = MarkerOptions(context, id, icon, vector, latLng, rotation, symbolLayer)
+        fun build(context: Context) = MarkerOptions(context, id, requestUniqueId, icon, vector, latLng, rotation, symbolLayer)
     }
 
 }

@@ -38,7 +38,7 @@ fun MapboxMap.addMarker(vararg markerOptions: MarkerOptions): MarkerLayer {
     val markerLayer = MarkerLayer()
     markerOptions.map { options ->
         val markerBuilder = MarkerBuilder(options.context!!, style)
-        val marker = markerBuilder.newMarker(options.id!!, options.latLng!!, options.icon!!, options.vector!!)
+        val marker = markerBuilder.newMarker(options.id!!, options.latLng!!, options.icon!!, options.vector!!, options.requestUniqueId!!)
         options.symbolLayer?.invoke(marker)
         style?.addMarker(marker)
 

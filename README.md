@@ -26,13 +26,13 @@
 ```groovy
 
 // the core library
-implementation 'com.utsman.smartmarker:core:1.2.9@aar'
+implementation 'com.utsman.smartmarker:core:1.2.11@aar'
 
 // extension for google maps
-implementation 'com.utsman.smartmarker:ext-googlemaps:1.2.9@aar'
+implementation 'com.utsman.smartmarker:ext-googlemaps:1.2.11@aar'
 
 // extension for Mapbox
-implementation 'com.utsman.smartmarker:ext-mapbox:1.2.9@aar'
+implementation 'com.utsman.smartmarker:ext-mapbox:1.2.11@aar'
 
 ```
 For extensions, you don't need to add mapbox extensions if you not use the sdk mapbox. As well as the google map sdk.
