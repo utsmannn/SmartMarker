@@ -18,6 +18,7 @@ package com.utsman.smartmarker.sample
 
 import android.location.Location
 import android.os.Bundle
+import android.os.Handler
 import androidx.appcompat.app.AppCompatActivity
 import com.mapbox.android.gestures.RotateGestureDetector
 import com.mapbox.mapboxsdk.Mapbox
@@ -29,12 +30,10 @@ import com.mapbox.mapboxsdk.location.modes.CameraMode
 import com.mapbox.mapboxsdk.location.modes.RenderMode
 import com.mapbox.mapboxsdk.maps.MapboxMap
 import com.mapbox.mapboxsdk.maps.Style
+import com.mapbox.mapboxsdk.style.layers.SymbolLayer
 import com.utsman.smartmarker.location.LocationUpdateListener
 import com.utsman.smartmarker.location.LocationWatcher
-import com.utsman.smartmarker.mapbox.Marker
-import com.utsman.smartmarker.mapbox.MarkerOptions
-import com.utsman.smartmarker.mapbox.addMarker
-import com.utsman.smartmarker.mapbox.toLatLngMapbox
+import com.utsman.smartmarker.mapbox.*
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
@@ -51,7 +50,7 @@ class TrackerMapboxActivity : AppCompatActivity() {
     private val compositeDisposable = CompositeDisposable()
 
     private var marker1: Marker? = null
-    private var marker2: Marker? = null
+    private lateinit var marker2: Marker
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -135,14 +134,15 @@ class TrackerMapboxActivity : AppCompatActivity() {
             mapboxMap.setStyle(Style.OUTDOORS) { style ->
 
                 locationWatcher.getLocation(this) { location ->
+
                     val markerOptions = MarkerOptions.Builder()
-                        .setId("id")
+                        .setId("layer-id")
                         .setIcon(R.drawable.ic_marker_direction_2, true)
                         .setPosition(location.toLatLngMapbox())
                         .build(this)
 
                     marker2 = mapboxMap.addMarker(markerOptions)
-                    logi("marker is  --> ${marker2?.getId()}")
+                    logi("marker is  --> ${marker2.getId()}")
 
                     moveCamera(location, mapboxMap)
                     updateLocation()
@@ -162,6 +162,18 @@ class TrackerMapboxActivity : AppCompatActivity() {
                         }
 
                     })
+
+                    Handler().postDelayed({
+                        toast("start remove marker --> ${marker2.getId()}")
+                        //style.removeImage(marker2?.getId()!!)
+                        //style.removeMarker(marker2!!)
+                        //style.removeLayer
+
+                        //style.removeLayer(marker2.getId())
+                        //style.layers.clear()
+                        //markerOptions.removeMe()
+                        style.removeLayer("layer-id")
+                    }, 5000)
 
                     val updatePosition = CameraPosition.Builder()
                         .zoom(17.0)

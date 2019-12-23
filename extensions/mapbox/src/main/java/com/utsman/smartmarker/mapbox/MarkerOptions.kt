@@ -18,6 +18,7 @@ package com.utsman.smartmarker.mapbox
 
 import android.content.Context
 import com.mapbox.mapboxsdk.geometry.LatLng
+import com.mapbox.mapboxsdk.maps.Style
 import com.mapbox.mapboxsdk.style.layers.SymbolLayer
 
 class MarkerOptions private constructor(
@@ -55,9 +56,23 @@ class MarkerOptions private constructor(
         fun setPosition(latLng: LatLng) = apply { this.latLng = latLng }
         fun setRotation(rotation: Double?) = apply { this.rotation = rotation }
         fun withSymbolLayer(symbolLayer: ((SymbolLayer) -> Unit)) = apply { this.symbolLayer = symbolLayer }
-
         fun build(context: Context) = MarkerOptions(context, id, icon, vector, latLng, rotation, symbolLayer)
     }
 
+    internal lateinit var markerSymbol: SymbolLayer
+    internal var style: Style? = null
+    /*internal fun addMarkerSymbol(style: Style?, markerSymbol: SymbolLayer) {
+        this.style = style
+        this.markerSymbol = markerSymbol
+    }*/
+
+    internal var remo: (() -> Unit?)? = null
+    internal fun remove(remove : () -> Unit) {
+        remo = remove
+    }
+
+    fun removeMe() = apply {
+        remo?.invoke()
+    }
 }
 

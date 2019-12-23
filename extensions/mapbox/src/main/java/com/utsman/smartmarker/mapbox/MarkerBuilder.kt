@@ -19,6 +19,7 @@ package com.utsman.smartmarker.mapbox
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.os.Handler
 import android.util.Log
 import androidx.annotation.DrawableRes
 import androidx.core.content.res.ResourcesCompat
@@ -34,13 +35,14 @@ import com.mapbox.mapboxsdk.utils.BitmapUtils
 class MarkerBuilder(private val context: Context, private val style: Style?) {
 
     lateinit var jsonSource: GeoJsonSource
+    lateinit var symbolLayer: SymbolLayer
 
     private fun newSymbol(id: String): SymbolLayer {
-        return SymbolLayer("layer-$id", "source-$id")
+        return SymbolLayer(id, "source-$id")
     }
 
     internal fun newMarker(id: String, latLng: LatLng, @DrawableRes iconVector: Int, vector: Boolean = false): SymbolLayer {
-        val symbolLayer = newSymbol(id)
+        symbolLayer = newSymbol(id)
 
         jsonSource = GeoJsonSource(
             "source-$id",
@@ -67,6 +69,8 @@ class MarkerBuilder(private val context: Context, private val style: Style?) {
             PropertyFactory.iconIgnorePlacement(true),
             PropertyFactory.iconAllowOverlap(true)
         )
+
+        Log.i("symbol layer id is --> ", id)
         return symbolLayer
     }
 }

@@ -18,10 +18,12 @@ package com.utsman.smartmarker.mapbox
 
 import android.animation.ObjectAnimator
 import android.animation.ValueAnimator
+import android.graphics.Color
 import android.os.Handler
 import android.os.SystemClock
 import android.util.Log
 import android.view.animation.LinearInterpolator
+import androidx.annotation.ColorInt
 import androidx.annotation.Nullable
 import androidx.lifecycle.MutableLiveData
 import com.mapbox.android.gestures.RotateGestureDetector
@@ -30,6 +32,7 @@ import com.mapbox.mapboxsdk.geometry.LatLng
 import com.mapbox.mapboxsdk.maps.MapboxMap
 import com.mapbox.mapboxsdk.maps.Style
 import com.mapbox.mapboxsdk.style.layers.PropertyFactory
+import com.mapbox.mapboxsdk.style.layers.PropertyValue
 import com.mapbox.mapboxsdk.style.layers.SymbolLayer
 import com.mapbox.mapboxsdk.style.sources.GeoJsonSource
 
@@ -37,7 +40,7 @@ class Marker(private var currentLatLng: LatLng,
              private val mapboxMap: MapboxMap,
              private val jsonSource: GeoJsonSource,
              private val symbolLayer: SymbolLayer,
-             private val idMarker: String?) {
+             private val idMarker: String) {
 
     private val liveRotate = MutableLiveData<Float>()
     private var animator: ValueAnimator? = null
@@ -45,10 +48,16 @@ class Marker(private var currentLatLng: LatLng,
     fun getId() = idMarker
     fun getRotation() = heading
 
+    private val liveVisibility = MutableLiveData<Boolean>()
+
     init {
         liveRotate.postValue(0f)
         liveRotate.observeForever {
             symbolLayer.withProperties(PropertyFactory.iconRotate(it))
+        }
+
+        liveVisibility.observeForever {
+            symbolLayer.withProperties(PropertyFactory.iconRotate(160f))
         }
     }
 
@@ -91,6 +100,8 @@ class Marker(private var currentLatLng: LatLng,
 
     fun getLatLng() = currentLatLng
 
+    fun getSource() = jsonSource
+
     private fun animatorUpdateListener(jsonSource: GeoJsonSource) : ValueAnimator.AnimatorUpdateListener {
         return ValueAnimator.AnimatorUpdateListener { value ->
             val animatedLatLng = value.animatedValue as LatLng
@@ -114,6 +125,7 @@ class Marker(private var currentLatLng: LatLng,
 
                     val rotation = if (-rot > 180) rot / 2 else rot
                     liveRotate.postValue(rotation)
+                    currentLatLng = animator!!.animatedValue as LatLng
                     startRotation = rotation
                     if (t < 1.0) {
                         handler.postDelayed(this, 100)

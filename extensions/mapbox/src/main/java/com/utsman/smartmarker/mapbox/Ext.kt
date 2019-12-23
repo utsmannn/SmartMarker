@@ -21,6 +21,7 @@ import android.location.Location
 import android.util.Log
 import com.mapbox.mapboxsdk.geometry.LatLng
 import com.mapbox.mapboxsdk.maps.MapboxMap
+import com.mapbox.mapboxsdk.style.layers.SymbolLayer
 
 fun Location.toLatLngMapbox() = LatLng(latitude, longitude)
 
@@ -34,26 +35,7 @@ val latLngEvaluator = object : TypeEvaluator<LatLng> {
     }
 }
 
-fun MapboxMap.addMarkers(vararg markerOptions: MarkerOptions): MarkerLayer {
-    val markerLayer = MarkerLayer()
-    markerOptions.map { options ->
-        val markerBuilder = MarkerBuilder(options.context!!, style)
-        val marker = markerBuilder.newMarker(options.id!!, options.latLng!!, options.icon!!, options.vector!!)
-        options.symbolLayer?.invoke(marker)
-        style?.addMarker(marker)
-
-        val jsonSource = markerBuilder.jsonSource
-        val mark = Marker(options.latLng, this, jsonSource, marker, options.id)
-        options.rotation?.let { rot ->
-            mark.rotateMarker(rot)
-        }
-        markerLayer.add(mark)
-    }
-    return markerLayer
-}
-
-fun MapboxMap.addMarker(options: MarkerOptions): Marker? {
-    val markerLayer = MarkerLayer()
+fun MapboxMap.addMarker(options: MarkerOptions): Marker {
     val markerBuilder = MarkerBuilder(options.context!!, style)
     val marker = markerBuilder.newMarker(options.id!!, options.latLng!!, options.icon!!, options.vector!!)
     options.symbolLayer?.invoke(marker)
@@ -65,23 +47,19 @@ fun MapboxMap.addMarker(options: MarkerOptions): Marker? {
     options.rotation?.let { rot ->
         mark.rotateMarker(rot)
     }
+
+    val markerLayer = MarkerLayer(markerBuilder.symbolLayer.id, jsonSource.id)
+
     markerLayer.add(mark)
     return markerLayer.get(options.id)
 }
 
-
-@Suppress("NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS")
-class MarkerLayer {
+class MarkerLayer(layerId: String, sourceId: String) : SymbolLayer(layerId, sourceId) {
     private val markers: MutableList<Marker> = mutableListOf()
 
     fun add(marker: Marker) = apply { markers.add(marker) }
 
-    fun get(id: String?): Marker? {
-        return try {
-            markers.single { id == it.getId() }
-        } catch (e: NoSuchElementException) {
-            Log.e("SmartMarker-mapbox", e.message)
-            return null
-        }
+    fun get(id: String): Marker {
+        return markers.single { id == it.getId() }
     }
 }

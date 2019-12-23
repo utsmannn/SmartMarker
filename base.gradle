@@ -24,7 +24,7 @@ ext {
     libraryName = 'smartmarker'
 
     publishedGroupId = 'com.utsman.smartmarker'
-    libraryVersion = '1.3.12'
+    libraryVersion = '1.3.2'
 
     libraryDescription = 'Smart Marker for Google Maps and Mapbox'
     siteUrl = 'https://github.com/utsmannn/SmartMarker'
